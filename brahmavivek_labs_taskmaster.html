@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster by BrahmaVivek Labs - Your Ultimate Productivity Companion</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        fira: ['Fira Code', 'monospace'],
+                        handwritten: ['Caveat', 'cursive'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7', /* Clean Professional Sky Blue */
+                            600: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            400: '#0d9488', /* Clean Mint Teal */
+                            500: '#0f766e',
+                        },
+                        dark: {
+                            950: '#030712', /* True Obsidian Dark */
+                            900: '#090d16',
+                            800: '#111827',
+                            700: '#1f2937',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #030712; /* Minimalistic Dark Gray-Black Base */
+            color: #f3f4f6;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+        
+        .glass-panel {
+            background: rgba(9, 13, 22, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Reveal classes for scroll effects */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Minimalist Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        /* Mockup Frame Layouts */
+        .browser-mockup {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            background: #090d16;
+            box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.95);
+            overflow: hidden;
+        }
+        
+        /* 8 DYNAMIC AESTHETIC THEMES MAPPED TO APP VALUES */
+        .tm-theme-peach {
+            --tm-window-bg: #fffbf9;
+            --tm-header-bg: #ffffff;
+            --tm-active-tab: #ffece5;
+            --tm-tab-bg: #fdf2eb;
+            --tm-tab-text: #451a03;
+            --tm-card-bg: #ffffff;
+            --tm-card-border: #fadcce;
+            --tm-text: #1c0a00;
+            --tm-text-muted: #7c2d12;
+            --tm-accent: #ea580c;
+            --tm-accent-hover: #c2410c;
+            --tm-accent-light: #fdf2eb;
+            --tm-btn-text: #ffffff;
+        }
+        .tm-theme-dracula {
+            --tm-window-bg: #1e1f29;
+            --tm-header-bg: #14151f;
+            --tm-active-tab: #44475a;
+            --tm-tab-bg: #282a36;
+            --tm-tab-text: #f8f8f2;
+            --tm-card-bg: #14151f;
+            --tm-card-border: #383a59;
+            --tm-text: #f8f8f2;
+            --tm-text-muted: #6272a4;
+            --tm-accent: #bd93f9;
+            --tm-accent-hover: #ff79c6;
+            --tm-accent-light: #282a36;
+            --tm-btn-text: #1e1f29;
+        }
+        .tm-theme-nord {
+            --tm-window-bg: #f0f4f8;
+            --tm-header-bg: #e5e9f0;
+            --tm-active-tab: #88c0d0;
+            --tm-tab-bg: #d8dee9;
+            --tm-tab-text: #2e3440;
+            --tm-card-bg: #ffffff;
+            --tm-card-border: #d8dee9;
+            --tm-text: #2e3440;
+            --tm-text-muted: #4c566a;
+            --tm-accent: #436c85;
+            --tm-accent-hover: #5e81ac;
+            --tm-accent-light: #e5e9f0;
+            --tm-btn-text: #ffffff;
+        }
+        .tm-theme-sunset {
+            --tm-window-bg: #141210;
+            --tm-header-bg: #1f1a17;
+            --tm-active-tab: #ea580c;
+            --tm-tab-bg: #2e2522;
+            --tm-tab-text: #fdf6f0;
+            --tm-card-bg: #1f1a17;
+            --tm-card-border: #3b2b25;
+            --tm-text: #fdf6f0;
+            --tm-text-muted: #a38d84;
+            --tm-accent: #f97316;
+            --tm-accent-hover: #ea580c;
+            --tm-accent-light: #2e2522;
+            --tm-btn-text: #ffffff;
+        }
+        .tm-theme-mocha {
+            --tm-window-bg: #271a15;
+            --tm-header-bg: #1c120f;
+            --tm-active-tab: #e7d8d2;
+            --tm-tab-bg: #3d2621;
+            --tm-tab-text: #f5ece9;
+            --tm-card-bg: #1c120f;
+            --tm-card-border: #4d2f28;
+            --tm-text: #f5ece9;
+            --tm-text-muted: #a6847b;
+            --tm-accent: #cca599;
+            --tm-accent-hover: #e7d8d2;
+            --tm-accent-light: #3d2621;
+            --tm-btn-text: #271a15;
+        }
+        .tm-theme-sage {
+            --tm-window-bg: #f5f8f6;
+            --tm-header-bg: #cbd6ce;
+            --tm-active-tab: #4a7258;
+            --tm-tab-bg: #e1e9e3;
+            --tm-tab-text: #1c2e22;
+            --tm-card-bg: #ffffff;
+            --tm-card-border: #cbd6ce;
+            --tm-text: #1c2e22;
+            --tm-text-muted: #4e6255;
+            --tm-accent: #4a7258;
+            --tm-accent-hover: #3d5c46;
+            --tm-accent-light: #bdcbd1;
+            --tm-btn-text: #ffffff;
+        }
+        .tm-theme-dark {
+            --tm-window-bg: #090d16;
+            --tm-header-bg: #111827;
+            --tm-active-tab: #38bdf8;
+            --tm-tab-bg: #1f2937;
+            --tm-tab-text: #f3f4f6;
+            --tm-card-bg: #111827;
+            --tm-card-border: #1f2937;
+            --tm-text: #f3f4f6;
+            --tm-text-muted: #9ca3af;
+            --tm-accent: #0ea5e9;
+            --tm-accent-hover: #38bdf8;
+            --tm-accent-light: #090d16;
+            --tm-btn-text: #ffffff;
+        }
+        .tm-theme-light {
+            --tm-window-bg: #f9fafb;
+            --tm-header-bg: #ffffff;
+            --tm-active-tab: #e5e7eb;
+            --tm-tab-bg: #f3f4f6;
+            --tm-tab-text: #111827;
+            --tm-card-bg: #ffffff;
+            --tm-card-border: #d1d5db;
+            --tm-text: #111827;
+            --tm-text-muted: #4b5563;
+            --tm-accent: #111827;
+            --tm-accent-hover: #374151;
+            --tm-accent-light: #e5e7eb;
+            --tm-btn-text: #ffffff;
+        }
+
+        .tm-sim-window {
+            background-color: var(--tm-window-bg);
+            color: var(--tm-text);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tm-sim-header {
+            background-color: var(--tm-header-bg);
+            color: var(--tm-text);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tm-sim-card {
+            background-color: var(--tm-card-bg);
+            border: 1px solid var(--tm-card-border);
+            color: var(--tm-text);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tm-sim-text {
+            color: var(--tm-text);
+        }
+        .tm-sim-muted {
+            color: var(--tm-text-muted);
+        }
+        .tm-sim-accent {
+            color: var(--tm-accent);
+        }
+        .tm-sim-bg-accent {
+            background-color: var(--tm-accent);
+            color: var(--tm-btn-text);
+        }
+        .tm-sim-bg-accent:hover {
+            background-color: var(--tm-accent-hover);
+        }
+        .tm-sim-border {
+            border-color: var(--tm-card-border);
+        }
+
+        /* FAQ Transition Utilities */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+        }
+        .faq-answer.open {
+            max-height: 250px;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans selection:bg-brand-500 selection:text-white">
+
+    <!-- Extremely faint, elegant dark background glows -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-[5%] left-[10%] w-[500px] h-[500px] bg-brand-500 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.04]"></div>
+        <div class="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-accent-400 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.03]"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-panel transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Identity -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center p-1 overflow-hidden">
+                        <img src="_0CB8C83A-AAFB-49DC-A040-B882ED88CB60_-removebg-preview.png" alt="BrahmaVivek Labs Logo" class="w-full h-full object-contain filter brightness-110 contrast-125" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80';">
+                    </div>
+                    <div>
+                        <span class="font-sans font-bold text-lg tracking-tight text-white block leading-none">BrahmaVivek</span>
+                        <span class="text-[9px] text-zinc-400 font-medium tracking-widest uppercase">Labs</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#hero" class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">Home</a>
+                    <a href="#features" class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">Tools</a>
+                    <a href="#about" class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">About</a>
+                    <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">FAQ</a>
+                    <a href="#contact" class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">Contact</a>
+                    
+                    <a href="#live-playground" class="text-[11px] font-semibold tracking-wider uppercase text-[#0ea5e9] hover:text-white transition-colors flex items-center gap-2 bg-[#0ea5e9]/5 px-3 py-1.5 rounded-full border border-[#0ea5e9]/10">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-400 animate-pulse"></span> Sandbox
+                    </a>
+                    
+                    <a href="#download" class="px-5 py-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold text-xs tracking-wider uppercase transition-all shadow-sm">
+                        Get App
+                    </a>
+                </div>
+
+                <!-- Mobile Navigation Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none p-2">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation Panel -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-zinc-800/80">
+            <div class="px-4 pt-4 pb-6 space-y-3 flex flex-col">
+                <a href="#hero" class="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-900">Home</a>
+                <a href="#features" class="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-900">Tools</a>
+                <a href="#about" class="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-900">About</a>
+                <a href="#faq" class="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-900">FAQ</a>
+                <a href="#contact" class="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-900">Contact</a>
+                <a href="#live-playground" class="px-3 py-2 text-sm font-medium text-brand-500 rounded-lg bg-brand-500/10 border border-brand-500/20">Live Demo Sandbox</a>
+                <a href="#download" class="mt-4 block px-6 py-3 rounded-xl bg-zinc-100 text-zinc-950 text-center text-xs tracking-wider uppercase font-bold">Install TaskMaster</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-36 pb-24 lg:pt-48 lg:pb-36 overflow-hidden z-10 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/40 text-xs font-medium text-zinc-400 mb-6 reveal">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-400"></span>
+                        <span>Now optimized for Chrome & Android</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight leading-[1.1] mb-6 reveal delay-100 text-white">
+                        Mindful focus. <br />
+                        <span class="text-zinc-400">Structured control.</span>
+                    </h1>
+                    
+                    <p class="text-base text-zinc-400 mb-8 max-w-xl leading-relaxed reveal delay-200">
+                        TaskMaster represents a refined equilibrium of mental clarity and technical utility. Organize checklist panels, jot raw ideas, synchronize local folders, and coordinate your calendar with complete offline privacy.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
+                        <a href="#live-playground" class="flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold uppercase tracking-wider transition-all">
+                            <i class="ph ph-play-circle text-lg"></i>
+                            Launch Live Sandbox
+                        </a>
+                        <a href="#download" class="flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg border border-zinc-800 bg-zinc-900/40 text-zinc-300 text-xs font-semibold uppercase tracking-wider hover:bg-zinc-800/80 transition-all">
+                            <i class="ph ph-download-simple text-lg"></i>
+                            Install App / Extension
+                        </a>
+                    </div>
+
+                    <!-- Quick Metrics -->
+                    <div class="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-zinc-900 reveal delay-400">
+                        <div>
+                            <span class="block text-2xl font-bold text-white tracking-tight">100%</span>
+                            <span class="text-xs text-zinc-500">Private & Local</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-white tracking-tight">8+</span>
+                            <span class="text-xs text-zinc-500">Expert Themes</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-white tracking-tight">0</span>
+                            <span class="text-xs text-zinc-500">Cloud Database Logins</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right Preview Mockup -->
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end reveal delay-200">
+                    <div class="relative w-full max-w-sm sm:max-w-md lg:max-w-full">
+                        
+                        <!-- Main Phone Frame Style -->
+                        <div class="relative mx-auto w-[285px] h-[570px] rounded-[2.5rem] border-[6px] border-zinc-800 bg-zinc-950 shadow-2xl overflow-hidden z-10">
+                            <!-- Minimalist notch -->
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-zinc-800 rounded-b-xl z-20"></div>
+                            
+                            <!-- Inside Phone View (Peach Theme Default style matching the original mock) -->
+                            <div class="absolute inset-0 bg-[#fff5f5] pt-9 px-4 pb-4 flex flex-col justify-between text-slate-800 font-sans">
+                                <div>
+                                    <!-- App header bar -->
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <i class="ph-bold ph-calendar-check text-[#d84315] text-base"></i>
+                                            <span class="font-sans font-bold text-xs text-[#2d1e1e]">TaskMaster</span>
+                                        </div>
+                                        <div class="flex gap-1">
+                                            <span class="w-4 h-4 rounded bg-green-600 text-white flex items-center justify-center text-[9px]"><i class="ph ph-folder"></i></span>
+                                            <span class="w-4 h-4 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-[9px]"><i class="ph ph-chat-centered"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Navigation Pills -->
+                                    <div class="grid grid-cols-3 gap-1 bg-[#fbe9e7] p-1 rounded-lg mb-4 text-[10px] font-bold">
+                                        <div class="bg-white py-1 rounded text-center text-[#2d1e1e] shadow-sm">Calendar</div>
+                                        <div class="py-1 text-center text-[#8d6e63]">All Tasks</div>
+                                        <div class="py-1 text-center text-[#8d6e63]">Notes</div>
+                                    </div>
+
+                                    <!-- Calendar strip -->
+                                    <div class="bg-white p-3 rounded-xl border border-[#fbe9e7] mb-3">
+                                        <div class="flex justify-between items-center text-[10px] mb-2">
+                                            <span class="font-bold text-[#2d1e1e]">June 2026</span>
+                                            <span class="text-[8px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-bold">Wk 24</span>
+                                        </div>
+                                        <div class="grid grid-cols-7 gap-1 text-center text-[9px]">
+                                            <div class="bg-orange-600 text-white rounded-md p-1">
+                                                <span class="block opacity-80">M</span>
+                                                <span class="font-bold">8</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">T</span>
+                                                <span class="font-bold">9</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">W</span>
+                                                <span class="font-bold">10</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">T</span>
+                                                <span class="font-bold">11</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">F</span>
+                                                <span class="font-bold">12</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">S</span>
+                                                <span class="font-bold">13</span>
+                                            </div>
+                                            <div class="p-1 text-slate-400">
+                                                <span class="block">S</span>
+                                                <span class="font-bold">14</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Agenda block -->
+                                    <div class="bg-white p-4 rounded-xl border border-[#fbe9e7] text-center py-6">
+                                        <h4 class="font-bold text-xs text-[#2d1e1e]">June 8, 2026</h4>
+                                        <p class="text-[10px] text-[#8d6e63] mb-3">0 tasks active</p>
+                                        <button class="bg-orange-600 text-white text-[10px] px-3 py-1.5 rounded-lg font-bold inline-flex items-center gap-1">
+                                            <i class="ph ph-plus"></i> Add Task
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Stick note footer -->
+                                <div class="bg-[#fbcfe8] p-3 rounded-lg text-slate-900 font-handwritten text-xs rotate-1 shadow-sm mb-1 leading-snug">
+                                    Your productivity data belongs entirely to you. Locally stored, zero-telemetry.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Live Sandbox Section -->
+    <section id="live-playground" class="py-24 bg-zinc-950/60 border-y border-zinc-900 relative z-10 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-brand-500 font-semibold tracking-wider uppercase text-xs block mb-2">Workspace Simulator</span>
+                <h2 class="text-2xl md:text-4xl font-sans font-bold text-white tracking-tight">Interactive Platform Demo</h2>
+                <p class="mt-4 text-zinc-400 max-w-xl mx-auto text-sm leading-relaxed">
+                    Test the complete, screen-accurate user experience directly inside this landing page sandbox. Pick themes, populate events, create sticking notes, and export JSON data safely.
+                </p>
+            </div>
+
+            <!-- Toast notification spot inside playground -->
+            <div class="relative">
+                <div id="sim-toast-container" class="absolute top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Sandbox Controller Column -->
+                <div class="lg:col-span-4 bg-zinc-900/40 rounded-xl border border-zinc-800/80 p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-sans font-bold text-sm uppercase tracking-wider text-zinc-300 mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span> Control Center
+                        </h3>
+                        
+                        <!-- Theme selector control block -->
+                        <div class="mb-6">
+                            <span class="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-3">Workspace Themes (8 Palettes)</span>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <button onclick="setSimTheme('peach')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#ff8a80]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Peach</span>
+                                </button>
+                                <button onclick="setSimTheme('dracula')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#bd93f9]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Dracula</span>
+                                </button>
+                                <button onclick="setSimTheme('nord')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#88c0d0]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Nord</span>
+                                </button>
+                                <button onclick="setSimTheme('sunset')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#ea580c]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Sunset</span>
+                                </button>
+                                <button onclick="setSimTheme('mocha')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#bcaaa4]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Mocha</span>
+                                </button>
+                                <button onclick="setSimTheme('sage')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#4a7258]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Sage</span>
+                                </button>
+                                <button onclick="setSimTheme('dark')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#1f2937]"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Dark</span>
+                                </button>
+                                <button onclick="setSimTheme('light')" class="flex flex-col items-center gap-1 p-2 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 transition-all">
+                                    <span class="w-4 h-4 rounded-full bg-[#ffffff] border border-zinc-300"></span>
+                                    <span class="text-[9px] text-zinc-400 font-medium">Light</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Simulator presets trigger -->
+                        <div class="mb-6">
+                            <span class="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-2.5">Platform Operations</span>
+                            <div class="space-y-2">
+                                <button onclick="simAddPresetTask()" class="w-full py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 text-xs rounded border border-zinc-800 flex items-center justify-between transition-all">
+                                    <span>⚡ Populate Demo Checklist</span>
+                                    <i class="ph ph-caret-right text-brand-500"></i>
+                                </button>
+                                <button onclick="simBackupSimulation()" class="w-full py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 text-xs rounded border border-zinc-800 flex items-center justify-between transition-all">
+                                    <span>💾 Connect Local PC Backup</span>
+                                    <i class="ph ph-caret-right text-teal-500"></i>
+                                </button>
+                                <button onclick="simExportJSON()" class="w-full py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 text-xs rounded border border-zinc-800 flex items-center justify-between transition-all">
+                                    <span>📥 Export Workspace (.json)</span>
+                                    <i class="ph ph-caret-right text-blue-400"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox Privacy Notice badge -->
+                    <div class="p-4 bg-zinc-900/60 rounded-lg border border-zinc-800 text-xs text-zinc-400">
+                        <div class="flex items-center gap-2 mb-1.5 text-zinc-200 font-semibold">
+                            <i class="ph ph-shield-check text-base text-brand-500"></i>
+                            <span>Hermetic Isolation</span>
+                        </div>
+                        Data created in this demo playground remains entirely inside your browser's local sandbox state memory.
+                    </div>
+                </div>
+
+                <!-- Live Simulator Body Column (Pixel Perfect Replica) -->
+                <div class="lg:col-span-8">
+                    <div class="browser-mockup flex flex-col h-[640px]">
+                        
+                        <!-- Simulated window header matching image bar style -->
+                        <div class="px-4 py-3 bg-zinc-950 border-b border-zinc-900 flex items-center justify-between text-xs text-zinc-500 font-sans select-none shrink-0">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-zinc-800 flex items-center justify-center text-[7px] text-zinc-400"><i class="ph ph-check"></i></span>
+                                <span class="font-semibold text-zinc-400 text-[11px]">TaskMaster Sandbox</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-zinc-500">
+                                <button class="hover:text-white" title="Pin / Unpin"><i class="ph ph-push-pin-slash"></i></button>
+                                <button class="hover:text-white" title="Minimize"><i class="ph ph-minus"></i></button>
+                                <button class="hover:text-red-400" title="Close"><i class="ph ph-x"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Live Taskmaster mockup structure -->
+                        <div id="sim-body-root" class="tm-theme-peach tm-sim-window flex-1 flex flex-col overflow-hidden text-sm">
+                            
+                            <!-- Application inner header bar matching screenshot -->
+                            <div class="tm-sim-header px-4 py-3 border-b tm-sim-border flex items-center justify-between shrink-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded bg-gradient-to-tr from-brand-500 to-accent-400 flex items-center justify-center shadow">
+                                        <i class="ph ph-infinity text-white text-xs"></i>
+                                    </span>
+                                    <span class="font-sans font-bold text-xs tm-sim-text">TaskMaster</span>
+                                </div>
+                                
+                                <!-- Tool Buttons Row shown on top right of the screenshot -->
+                                <div class="flex items-center gap-1">
+                                    <button onclick="toggleSimSplitPanel()" class="w-7 h-7 rounded border tm-sim-border flex items-center justify-center tm-sim-muted hover:text-zinc-950 hover:bg-slate-500/5 transition-all text-xs" title="Toggle Split View">
+                                        <i class="ph ph-columns"></i>
+                                    </button>
+                                    <button onclick="triggerSandboxToast('Preferences module opened!', 'info')" class="w-7 h-7 rounded border tm-sim-border flex items-center justify-center tm-sim-muted hover:text-zinc-950 hover:bg-slate-500/5 transition-all text-xs" title="Settings">
+                                        <i class="ph ph-gear"></i>
+                                    </button>
+                                    <button onclick="simBackupSimulation()" class="w-7 h-7 rounded bg-emerald-600 text-white flex items-center justify-center text-xs shadow-sm hover:opacity-90" title="Active Auto-Backup Directory Connected">
+                                        <i class="ph-fill ph-folder-notch-open"></i>
+                                    </button>
+                                    <button onclick="triggerSandboxToast('Feedback box loaded. Send suggestions to vivek@brahmavivek.com', 'info')" class="w-7 h-7 rounded border border-orange-400/50 bg-orange-500/10 text-orange-600 flex items-center justify-center text-xs" title="Contact Support">
+                                        <i class="ph ph-chat-centered"></i>
+                                    </button>
+                                    <button onclick="triggerSandboxToast('Themes configured natively under palette controller!', 'success')" class="w-7 h-7 rounded border tm-sim-border flex items-center justify-center tm-sim-muted hover:text-zinc-950 hover:bg-slate-500/5 transition-all text-xs" title="Themes Grid">
+                                        <i class="ph ph-palette"></i>
+                                    </button>
+                                    <button onclick="simImportPrompt()" class="w-7 h-7 rounded border tm-sim-border flex items-center justify-center tm-sim-muted hover:text-zinc-950 hover:bg-slate-500/5 transition-all text-xs" title="Import JSON config">
+                                        <i class="ph ph-upload-simple"></i>
+                                    </button>
+                                    <button onclick="simExportJSON()" class="w-7 h-7 rounded border tm-sim-border flex items-center justify-center tm-sim-muted hover:text-zinc-950 hover:bg-slate-500/5 transition-all text-xs" title="Export JSON data">
+                                        <i class="ph ph-download-simple"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tabs Pills Layout (Replicates 'Calendar', 'All Tasks', 'Notes') -->
+                            <div class="px-4 pt-3 shrink-0">
+                                <div class="grid grid-cols-3 gap-1 bg-[#fbe9e7] tm-sim-border p-1 rounded-xl font-bold text-xs text-center select-none" id="tabs-pills-bar" style="background-color: var(--tm-tab-bg);">
+                                    <button onclick="switchSimTab('calendar')" id="tab-btn-calendar" class="py-1.5 rounded-lg transition-all shadow-sm tm-sim-text" style="background-color: var(--tm-active-tab);">Calendar</button>
+                                    <button onclick="switchSimTab('tasks')" id="tab-btn-tasks" class="py-1.5 rounded-lg transition-all tm-sim-muted hover:opacity-80">All Tasks</button>
+                                    <button onclick="switchSimTab('notes')" id="tab-btn-notes" class="py-1.5 rounded-lg transition-all tm-sim-muted hover:opacity-80">Notes</button>
+                                </div>
+                            </div>
+
+                            <!-- Main simulated app content workspace -->
+                            <div class="flex-1 overflow-y-auto p-4 flex flex-col">
+                                
+                                <!-- ==================== TAB: CALENDAR ==================== -->
+                                <div id="sim-tab-calendar" class="space-y-3.5">
+                                    <!-- Monthly strip headers matching screenshot -->
+                                    <div class="tm-sim-card p-4 rounded-xl border flex flex-col gap-3.5 shadow-sm">
+                                        <div class="flex items-center justify-between text-xs">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-sans font-bold text-sm tm-sim-text" id="sim-month-header-label">June 2026</span>
+                                                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 tracking-wide shrink-0">Wk 24</span>
+                                                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 shrink-0" id="sim-completion-badge">Done: 0/0</span>
+                                            </div>
+                                            
+                                            <!-- Calendar timeline helpers matching screenshot -->
+                                            <div class="flex items-center gap-1 text-xs">
+                                                <button onclick="shiftTimeline(-7)" class="p-1 hover:opacity-85 tm-sim-muted"><i class="ph ph-caret-left"></i></button>
+                                                <button onclick="resetTimelineToday()" class="px-2 py-0.5 text-[10px] rounded bg-white dark:bg-zinc-800 border tm-sim-border font-bold tm-sim-text shadow-sm hover:opacity-90">Today</button>
+                                                <button class="p-1 hover:opacity-85 tm-sim-muted border tm-sim-border rounded"><i class="ph ph-calendar"></i></button>
+                                                <button onclick="shiftTimeline(7)" class="p-1 hover:opacity-85 tm-sim-muted"><i class="ph ph-caret-right"></i></button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Days Timeline strip (M 8, T 9, W 10, etc) -->
+                                        <div class="grid grid-cols-7 gap-1 text-center select-none" id="sim-weekly-strip-container">
+                                            <!-- Injected via Javascript -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Agenda Card displaying matching events -->
+                                    <div class="tm-sim-card p-4 rounded-xl border shadow-sm">
+                                        <div class="flex items-center justify-between border-b tm-sim-border pb-3 mb-3">
+                                            <div>
+                                                <h4 class="font-sans font-bold text-xs tm-sim-text" id="sim-cal-agenda-date">June 8, 2026</h4>
+                                                <p class="text-[10px] tm-sim-muted" id="sim-cal-agenda-count">0 tasks active</p>
+                                            </div>
+                                            <button onclick="toggleAddTaskForm()" class="tm-sim-bg-accent px-3 py-1.5 rounded-lg text-[10px] font-bold inline-flex items-center gap-1 shadow-sm transition-all">
+                                                <i class="ph ph-plus"></i> Add Task
+                                            </button>
+                                        </div>
+
+                                        <!-- New task inline input form toggled from the Add Task button -->
+                                        <div id="sim-inline-task-form" class="hidden mb-4 p-3 bg-zinc-500/5 rounded-lg border tm-sim-border space-y-2">
+                                            <div class="flex gap-2">
+                                                <input type="text" id="inline-task-text" placeholder="Task description..." class="flex-1 text-xs px-2.5 py-1.5 rounded bg-white dark:bg-zinc-900 border tm-sim-border tm-sim-text focus:outline-none">
+                                                <select id="inline-task-priority" class="text-xs rounded border tm-sim-border bg-white dark:bg-zinc-900 tm-sim-text px-1">
+                                                    <option value="High">🔴 High</option>
+                                                    <option value="Medium" selected>🟡 Medium</option>
+                                                    <option value="Low">🟢 Low</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <input type="text" id="inline-task-link" placeholder="Reference URL" class="text-xs px-2 py-1 rounded bg-white dark:bg-zinc-900 border tm-sim-border tm-sim-text max-w-[150px]">
+                                                <div class="flex gap-1.5">
+                                                    <button onclick="toggleAddTaskForm()" class="px-2.5 py-1 text-[10px] tm-sim-muted hover:opacity-80">Cancel</button>
+                                                    <button onclick="saveInlineTask()" class="tm-sim-bg-accent px-3 py-1 rounded text-[10px] font-bold">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Agenda items target state / empty list rendering matching image -->
+                                        <div id="sim-agenda-items-list" class="space-y-2">
+                                            <!-- Dynamically generated agenda blocks -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ==================== TAB: ALL TASKS ==================== -->
+                                <div id="sim-tab-tasks" class="space-y-4 hidden">
+                                    <div class="flex items-center justify-between border-b tm-sim-border pb-2 text-[11px]">
+                                        <div class="flex gap-2">
+                                            <button onclick="filterSimTasks('all')" id="filter-btn-all" class="font-bold tm-sim-accent">All</button>
+                                            <span class="tm-sim-muted">|</span>
+                                            <button onclick="filterSimTasks('pending')" id="filter-btn-pending" class="tm-sim-muted hover:opacity-85">Pending</button>
+                                            <span class="tm-sim-muted">|</span>
+                                            <button onclick="filterSimTasks('completed')" id="filter-btn-completed" class="tm-sim-muted hover:opacity-85">Completed</button>
+                                        </div>
+                                        <div class="tm-sim-muted text-[10px]">
+                                            Total: <span id="sim-total-count-lbl" class="font-bold">0</span> entries
+                                        </div>
+                                    </div>
+
+                                    <!-- Cumulative List View -->
+                                    <div id="sim-all-tasks-list" class="space-y-2">
+                                        <!-- Task list cards -->
+                                    </div>
+                                </div>
+
+                                <!-- ==================== TAB: NOTES ==================== -->
+                                <div id="sim-tab-notes" class="space-y-4 hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                        
+                                        <!-- Notes composer panel -->
+                                        <div class="md:col-span-5 tm-sim-card p-4 rounded-xl border flex flex-col gap-3">
+                                            <span class="text-[10px] font-bold uppercase tracking-wider tm-sim-muted">Compose Quick Note</span>
+                                            
+                                            <!-- Color select palette block -->
+                                            <div>
+                                                <span class="block text-[10px] tm-sim-muted mb-1">Color palette:</span>
+                                                <div class="flex gap-1.5">
+                                                    <button onclick="setSimNoteColor('#fef08a')" class="w-5 h-5 rounded-full bg-yellow-200 border border-black/10 transition-all" title="Classic Yellow"></button>
+                                                    <button onclick="setSimNoteColor('#bfdbfe')" class="w-5 h-5 rounded-full bg-blue-200 border border-black/10 transition-all" title="Sky Blue"></button>
+                                                    <button onclick="setSimNoteColor('#bbf7d0')" class="w-5 h-5 rounded-full bg-green-200 border border-black/10 transition-all" title="Mint Green"></button>
+                                                    <button onclick="setSimNoteColor('#fbcfe8')" class="w-5 h-5 rounded-full bg-pink-200 border border-black/10 transition-all" title="Soft Pink"></button>
+                                                    <button onclick="setSimNoteColor('#e9d5ff')" class="w-5 h-5 rounded-full bg-purple-200 border border-black/10 transition-all" title="Lavender"></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Font family select toggle -->
+                                            <div>
+                                                <span class="block text-[10px] tm-sim-muted mb-1">Font Style:</span>
+                                                <div class="grid grid-cols-3 gap-1">
+                                                    <button onclick="setSimNoteFont('font-handwritten')" class="bg-zinc-100 dark:bg-zinc-800 border tm-sim-border rounded py-0.5 text-[10px] font-medium tm-sim-text">Sketch</button>
+                                                    <button onclick="setSimNoteFont('font-sans')" class="bg-zinc-100 dark:bg-zinc-800 border tm-sim-border rounded py-0.5 text-[10px] font-medium tm-sim-text">Sans</button>
+                                                    <button onclick="setSimNoteFont('font-fira')" class="bg-zinc-100 dark:bg-zinc-800 border tm-sim-border rounded py-0.5 text-[10px] font-medium tm-sim-text">Mono</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Note input block -->
+                                            <textarea id="sim-note-textarea" rows="2" placeholder="Jot design notes..." class="bg-zinc-100 dark:bg-zinc-800 border tm-sim-border rounded p-2 text-xs focus:outline-none tm-sim-text"></textarea>
+                                            
+                                            <button onclick="addSimNote()" class="tm-sim-bg-accent hover:opacity-90 font-bold py-1.5 rounded text-xs transition-all">
+                                                Add Note Card
+                                            </button>
+                                        </div>
+
+                                        <!-- Notes Display Canvas list -->
+                                        <div class="md:col-span-7 space-y-3">
+                                            <span class="text-[10px] font-bold uppercase tracking-wider tm-sim-muted">Active Sticky Notes</span>
+                                            
+                                            <div id="sim-notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[350px] overflow-y-auto pr-1">
+                                                <!-- Dynamic Notes -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Simulator footer status indicator -->
+                            <div class="px-4 py-2 bg-black/5 border-t tm-sim-border text-[10px] tm-sim-muted flex items-center justify-between shrink-0 select-none">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Offline Database Active
+                                </span>
+                                <span>Hermetic Directory Linked</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools / Feature Grid Section -->
+    <section id="features" class="py-24 relative z-10 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <span class="text-zinc-500 font-semibold tracking-wider uppercase text-xs block mb-2">Designed For Focus</span>
+                <h2 class="text-2xl md:text-4xl font-sans font-bold text-white tracking-tight">Structured Workspace Utilities</h2>
+                <p class="mt-4 text-zinc-400 max-w-xl mx-auto text-sm leading-relaxed">
+                    TaskMaster brings essential developer utility directly to your active browser context with absolute speed and aesthetic precision.
+                </p>
+            </div>
+
+            <!-- Minimalist Outline Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-calendar text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Smart Calendar Tracking</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Visualize tasks and goals mapped onto an integrated calendar grid. Filter schedules down to single daily checklist timelines.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal delay-100">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-git-merge text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Hierarchical Checklists</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Divide complex objectives into infinite subtask structures. Track development targets systematically with color-coded tags.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal delay-200">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-note-pencil text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Scratchnote Snippets</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Jot raw ideas, design variables, or URLs directly into custom sticky notes. Tailor typography styles instantly.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-folder text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Local File Directory Sync</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Authorize a secure directory folder on your machine for hourly offline JSON backups. Absolute zero cloud logging.
+                    </p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal delay-100">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-lightning text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">1-Click Popup Hook</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Launches as an overlay dashboard over any browser workspace context. Eliminate tab-switching distractions immediately.
+                    </p>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="p-6 rounded-xl border border-zinc-800/80 bg-zinc-950/20 hover:border-zinc-700 transition-all duration-300 reveal delay-200">
+                    <div class="w-10 h-10 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200 mb-5">
+                        <i class="ph ph-palette text-xl"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Expert Theme Library</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Switch between Dracula, Nord, Sage, and Sunset palettes. Keep your workspace aligned with your physical surroundings.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Theme Palette Grid Showcase -->
+    <section id="themes-showcase" class="py-24 border-t border-zinc-900/60 relative z-10 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-zinc-500 font-semibold tracking-wider uppercase text-xs block mb-2">Expert Personalization</span>
+                <h2 class="text-2xl md:text-4xl font-sans font-bold text-white tracking-tight">Structured Theme Library</h2>
+                <p class="mt-4 text-zinc-400 max-w-xl mx-auto text-sm leading-relaxed">
+                    Designed to optimize cognitive visibility under varying physical light conditions. Choose from eight structured palettes.
+                </p>
+            </div>
+
+            <!-- Swatches Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Swatch 1 -->
+                <div class="p-6 rounded-xl border border-zinc-800 bg-zinc-950/20 flex flex-col justify-between h-44 reveal">
+                    <div>
+                        <h4 class="font-sans font-bold text-sm text-white mb-1">Peach Theme</h4>
+                        <p class="text-[11px] text-zinc-400">Crisp light backgrounds accented with high-contrast salmon peach highlights.</p>
+                    </div>
+                    <div class="flex gap-1.5 bg-zinc-900/60 p-2 rounded">
+                        <span class="w-4 h-4 rounded-full bg-[#fff5f5]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#ffe3e3]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#ff8a80]"></span>
+                    </div>
+                </div>
+
+                <!-- Swatch 2 -->
+                <div class="p-6 rounded-xl border border-zinc-800 bg-zinc-950/20 flex flex-col justify-between h-44 reveal delay-100">
+                    <div>
+                        <h4 class="font-sans font-bold text-sm text-white mb-1">Dracula Theme</h4>
+                        <p class="text-[11px] text-zinc-400">Classic dark purple development mode palette for developers.</p>
+                    </div>
+                    <div class="flex gap-1.5 bg-zinc-900/60 p-2 rounded">
+                        <span class="w-4 h-4 rounded-full bg-[#1e1f29]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#bd93f9]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#ff79c6]"></span>
+                    </div>
+                </div>
+
+                <!-- Swatch 3 -->
+                <div class="p-6 rounded-xl border border-zinc-800 bg-zinc-950/20 flex flex-col justify-between h-44 reveal delay-200">
+                    <div>
+                        <h4 class="font-sans font-bold text-sm text-white mb-1">Nord Theme</h4>
+                        <p class="text-[11px] text-zinc-400">Minimal arctic frost blues designed for high legibility.</p>
+                    </div>
+                    <div class="flex gap-1.5 bg-zinc-900/60 p-2 rounded">
+                        <span class="w-4 h-4 rounded-full bg-[#f0f4f8]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#88c0d0]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#436c85]"></span>
+                    </div>
+                </div>
+
+                <!-- Swatch 4 -->
+                <div class="p-6 rounded-xl border border-zinc-800 bg-zinc-950/20 flex flex-col justify-between h-44 reveal delay-300">
+                    <div>
+                        <h4 class="font-sans font-bold text-sm text-white mb-1">Sunset Theme</h4>
+                        <p class="text-[11px] text-zinc-400">Warm twilight color variables ideal for low-light evening focus.</p>
+                    </div>
+                    <div class="flex gap-1.5 bg-zinc-900/60 p-2 rounded">
+                        <span class="w-4 h-4 rounded-full bg-[#141210]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#ea580c]"></span>
+                        <span class="w-4 h-4 rounded-full bg-[#f97316]"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About BrahmaVivek Labs Section -->
+    <section id="about" class="py-24 border-t border-zinc-900/60 relative z-10 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Details -->
+                <div class="reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-400 mb-6">
+                        <i class="ph ph-heart text-zinc-400"></i> Core Values
+                    </div>
+                    <h2 class="text-2xl md:text-4xl font-sans font-bold text-white mb-6 tracking-tight leading-tight">
+                        About BrahmaVivek Labs
+                    </h2>
+                    <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
+                        At BrahmaVivek Labs, we prioritize direct user agency over complex cloud synchronization dependencies. TaskMaster is designed to execute immediately and entirely within client-side sandboxes.
+                    </p>
+                    <p class="text-sm text-zinc-400 mb-8 leading-relaxed">
+                        Our company identity is represented by the custom logo—combining the <strong>Lotus</strong> (mindful focus and cognitive serenity) with the <strong>Atom</strong> (strict systemic logic and computer science). That combination is embedded into every tool we manufacture.
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs font-semibold text-zinc-500">Developing native, high-performance client architectures from Maharashtra, India.</span>
+                    </div>
+                </div>
+
+                <!-- Right Brand Card -->
+                <div class="relative flex justify-center reveal delay-100">
+                    <div class="relative w-full max-w-sm bg-zinc-950/40 border border-zinc-800/80 p-8 rounded-2xl flex flex-col items-center text-center">
+                        <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg p-2.5 mb-6">
+                            <img src="_0CB8C83A-AAFB-49DC-A040-B882ED88CB60_-removebg-preview.png" alt="BrahmaVivek Labs" class="w-full h-full object-contain filter contrast-125">
+                        </div>
+                        <h3 class="text-base font-bold text-white mb-2 uppercase tracking-wide">Hermetic Privacy Principles</h3>
+                        <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                            We operate a strict zero-telemetry development protocol. Your schedules remain under your physical control.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 w-full text-left">
+                            <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800">
+                                <span class="block text-zinc-500 font-bold text-[9px] uppercase tracking-wider">Privacy Rating</span>
+                                <span class="text-zinc-200 font-semibold text-xs">Offline Isolation</span>
+                            </div>
+                            <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800">
+                                <span class="block text-zinc-500 font-bold text-[9px] uppercase tracking-wider">Local Processing</span>
+                                <span class="text-zinc-200 font-semibold text-xs">IndexedDB Cache</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frequently Asked Questions (FAQ) Section -->
+    <section id="faq" class="py-24 border-t border-zinc-900/60 scroll-mt-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-zinc-500 font-semibold tracking-wider uppercase text-xs block mb-2">Platform Details</span>
+                <h2 class="text-2xl md:text-4xl font-sans font-bold text-white tracking-tight">Frequently Asked Questions</h2>
+                <p class="mt-4 text-zinc-400 text-sm">
+                    Answers to fundamental architectural queries regarding local directories and data formats.
+                </p>
+            </div>
+
+            <!-- FAQ Accordion Container -->
+            <div class="space-y-4">
+                
+                <!-- FAQ Item 1 -->
+                <div class="rounded-xl border border-zinc-800 bg-zinc-950/20 p-5 reveal">
+                    <button onclick="toggleFaq(1)" class="w-full flex items-center justify-between text-left focus:outline-none">
+                        <span class="font-sans font-bold text-white text-sm md:text-base">Where is my workspace data located?</span>
+                        <i id="faq-icon-1" class="ph ph-plus text-zinc-400 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-ans-1" class="faq-answer text-xs text-zinc-400 leading-relaxed">
+                        All checklist parameters, note segments, and custom settings reside entirely inside your browser's local sandbox partition (via IndexedDB and localStorage). BrahmaVivek Labs does not operate external databases, guaranteeing total containment.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="rounded-xl border border-zinc-800 bg-zinc-950/20 p-5 reveal delay-100">
+                    <button onclick="toggleFaq(2)" class="w-full flex items-center justify-between text-left focus:outline-none">
+                        <span class="font-sans font-bold text-white text-sm md:text-base">How does the automatic backup function?</span>
+                        <i id="faq-icon-2" class="ph ph-plus text-zinc-400 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-ans-2" class="faq-answer text-xs text-zinc-400 leading-relaxed">
+                        By connecting a target directory on your hard drive, TaskMaster safely handles automated offline updates every hour. This keeps a standardized backup object file synced dynamically to your machine.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="rounded-xl border border-zinc-800 bg-zinc-950/20 p-5 reveal delay-200">
+                    <button onclick="toggleFaq(3)" class="w-full flex items-center justify-between text-left focus:outline-none">
+                        <span class="font-sans font-bold text-white text-sm md:text-base">How can I migrate my setup across machines?</span>
+                        <i id="faq-icon-3" class="ph ph-plus text-zinc-400 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-ans-3" class="faq-answer text-xs text-zinc-400 leading-relaxed">
+                        Since your settings and tasks exist in standard JSON notation, you can execute a manual JSON export, transport the lightweight document to your new machine, and run a 1-click import config to load your workspace immediately.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 border-t border-zinc-900/60 scroll-mt-20 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Details -->
+                <div class="lg:col-span-5 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-400 mb-6">
+                        <i class="ph ph-envelope text-zinc-400"></i> Contact Us
+                    </div>
+                    <h2 class="text-2xl md:text-4xl font-sans font-bold text-white tracking-tight leading-tight mb-4">
+                        Let's Connect.
+                    </h2>
+                    <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                        Have ideas to expand our structural theme list? Need to report an operational bug? Drop Vivek and our development squad a secure line.
+                    </p>
+                    <div class="space-y-4 text-xs text-zinc-300">
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-envelope-simple text-brand-500 text-lg"></i>
+                            <span>vivek@brahmavivek.com</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-map-pin text-accent-400 text-lg"></i>
+                            <span>Nashik, Maharashtra, India</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Form Box -->
+                <div class="lg:col-span-7 reveal delay-100">
+                    <div class="p-8 rounded-xl border border-zinc-850 bg-zinc-950/40 shadow-xl">
+                        <h3 class="font-sans font-bold text-sm uppercase tracking-wider text-white mb-4">Drop a quick message</h3>
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1.5">Full Name</label>
+                                    <input type="text" required class="w-full bg-zinc-950/80 border border-zinc-800 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1.5">Email Address</label>
+                                    <input type="email" required class="w-full bg-zinc-950/80 border border-zinc-800 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1.5">Message Subject</label>
+                                <input type="text" required class="w-full bg-zinc-950/80 border border-zinc-800 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1.5">Your Message</label>
+                                <textarea required rows="4" class="w-full bg-zinc-950/80 border border-zinc-800 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition-colors" placeholder="Message content..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold uppercase tracking-wider rounded text-xs transition-colors">
+                                Send Message Securely
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Download Install Area -->
+    <section id="download" class="py-20 relative z-10 scroll-mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="p-10 md:p-16 rounded-2xl text-center relative overflow-hidden reveal border border-zinc-800/80 bg-zinc-950/10 shadow-3xl">
+                <div class="relative z-10">
+                    <h2 class="text-2xl md:text-4xl font-sans font-bold text-white mb-6">Install TaskMaster Workspace</h2>
+                    <p class="text-xs text-zinc-400 mb-10 max-w-xl mx-auto leading-relaxed">
+                        Get direct productivity utility today on your desktop Chrome extension environment or pocket Android application. Secure, fast, offline.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                        <a href="#" class="flex items-center gap-3 px-6 py-3 rounded bg-white text-zinc-950 font-bold hover:bg-zinc-100 transition-all w-full sm:w-auto shadow">
+                            <i class="ph ph-google-play text-2xl text-zinc-950"></i>
+                            <div class="text-left leading-none">
+                                <div class="text-[8px] uppercase font-bold tracking-wider text-zinc-500 mb-1">Android Native</div>
+                                <div class="text-xs">Comming Soon</div>
+                            </div>
+                        </a>
+                        
+                        <a href="https://chromewebstore.google.com/detail/pgfafacfiocaihefcpnfhlpmopdhidel?utm_source=item-share-cb" class="flex items-center gap-3 px-6 py-3 rounded bg-zinc-900 border border-zinc-800 text-white font-bold hover:bg-zinc-850 transition-all w-full sm:w-auto shadow">
+                            <i class="ph ph-browser text-2xl text-zinc-400"></i>
+                            <div class="text-left leading-none">
+                                <div class="text-[8px] uppercase font-bold tracking-wider text-zinc-400 mb-1">Chrome Extension</div>
+                                <div class="text-xs">Install Extension</div>
+                            </div>
+                        </a>
+                    </div>
+                    <p class="mt-8 text-[11px] text-zinc-600">Minimum configuration: Android 8.0+ or Google Chrome browser v88+</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="border-t border-zinc-900/60 bg-zinc-950/80 pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center p-1.5 overflow-hidden">
+                            <img src="_0CB8C83A-AAFB-49DC-A040-B882ED88CB60_-removebg-preview.png" alt="BrahmaVivek Labs Logo" class="w-full h-full object-contain filter brightness-110 contrast-125" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80';">
+                        </div>
+                        <div>
+                            <span class="font-sans font-bold text-base tracking-tight text-white block leading-none">BrahmaVivek</span>
+                            <span class="text-[9px] text-zinc-500 font-medium tracking-widest uppercase">Labs</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-500 text-xs leading-relaxed max-w-sm">
+                        Building advanced, intuitive, elegant, and secure client-side software systems. Strictly dedicated to absolute user directory control.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white text-xs uppercase tracking-widest font-bold mb-4">TaskMaster Product</h4>
+                    <ul class="space-y-2 text-xs text-zinc-500">
+                        <li><a href="#live-playground" class="hover:text-white transition-colors">Launch Live Demo</a></li>
+                        <li><a href="#features" class="hover:text-white transition-colors">Workspace Tools</a></li>
+                        <li><a href="#themes-showcase" class="hover:text-white transition-colors">Explore 8 Themes</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white text-xs uppercase tracking-widest font-bold mb-4">Support & Policy</h4>
+                    <ul class="space-y-2 text-xs text-zinc-500">
+                        <li><a href="#" class="hover:text-white transition-colors">BrahmaVivek Docs</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-zinc-900/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-zinc-600 text-xs">
+                    &copy; 2026 BrahmaVivek Labs. All rights reserved. Locally persisted.
+                </p>
+                <div class="flex items-center gap-1.5 text-xs text-zinc-600">
+                    Handcrafted securely with minimal design parameters in India
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ARCHITECTURE & LOCAL SEED ---
+        let simTasks = [
+            { id: 1, text: "Finish wireframes for client portal dashboard", priority: "High", date: 8, month: 6, year: 2026, completed: false, link: "https://figma.com" },
+            { id: 2, text: "Review BrahmaVivek system architecture criteria", priority: "Medium", date: 8, month: 6, year: 2026, completed: false, link: "" },
+            { id: 3, text: "Refine recurring offline sync algorithms", priority: "Low", date: 10, month: 6, year: 2026, completed: true, link: "https://github.com/brahmavivek" },
+            { id: 4, text: "Assemble version 2.0 package releases", priority: "High", date: 12, month: 6, year: 2026, completed: false, link: "" }
+        ];
+
+        let simNotes = [
+            { id: 1, text: "Peach theme default configuration:\n--tm-window-bg: #fff5f5\n--tm-accent: #d84315", bg: "#fbcfe8", textClass: "text-slate-950", font: "font-fira" },
+            { id: 2, text: "Remember to call filesystem access updates natively during auto-backups on computer folders!", bg: "#fef08a", textClass: "text-slate-950", font: "font-handwritten" }
+        ];
+
+        // Timeline management parameters
+        let timelineBaseDate = 8; // represents Monday of the week (June 8, 2026)
+        let activeSelectedDate = 8; // June 8, 2026
+        let currentSimTheme = 'peach';
+        let currentSimTab = 'calendar';
+        let currentSimFilter = 'all';
+
+        let activeNoteColor = '#fef08a';
+        let activeNoteFont = 'font-handwritten';
+        let splitPanelActive = false;
+
+        // Initialize Web Elements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu toggle
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const menuPanel = document.getElementById('mobile-menu');
+            if (menuBtn && menuPanel) {
+                menuBtn.addEventListener('click', () => {
+                    menuPanel.classList.toggle('hidden');
+                });
+            }
+
+            // Scroll navbar state
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-xl', 'bg-[#030712]/95', 'border-b', 'border-zinc-900');
+                    navbar.classList.remove('glass-panel');
+                } else {
+                    navbar.classList.remove('shadow-xl', 'bg-[#030712]/95', 'border-b', 'border-zinc-900');
+                    navbar.classList.add('glass-panel');
+                }
+            });
+
+            // Reveal scroll triggers
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Set Initial Simulator layout
+            renderTimelineStrip();
+            renderSimAgenda();
+            renderSimTasks();
+            renderSimNotes();
+            setSimTheme('peach');
+        });
+
+        // --- SIMULATED APP ACTIONS & TOASTS ---
+        function triggerSandboxToast(message, type = 'info') {
+            const container = document.getElementById('sim-toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-lg shadow-lg border text-xs font-semibold flex items-center gap-2.5 transition-all transform translate-y-2 opacity-0 bg-[#090d16] border-zinc-800 text-white z-50`;
+            
+            let icon = '<i class="ph ph-info text-blue-400 text-base"></i>';
+            if (type === 'success') {
+                icon = '<i class="ph ph-check-circle text-emerald-400 text-base"></i>';
+                toast.classList.add('border-emerald-500/20', 'bg-emerald-950/20');
+            } else if (type === 'warning') {
+                icon = '<i class="ph ph-warning-circle text-amber-400 text-base"></i>';
+                toast.classList.add('border-amber-500/20', 'bg-amber-950/20');
+            }
+
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-4px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // --- SIMULATOR TAB CONTROLS ---
+        function switchSimTab(tab) {
+            currentSimTab = tab;
+            
+            // Toggle view panels
+            document.getElementById('sim-tab-calendar').classList.add('hidden');
+            document.getElementById('sim-tab-tasks').classList.add('hidden');
+            document.getElementById('sim-tab-notes').classList.add('hidden');
+            
+            document.getElementById(`sim-tab-${tab}`).classList.remove('hidden');
+
+            // Toggle Pill background classes inside #tabs-pills-bar mimicking screenshot peach theme styles
+            const pillsBar = document.getElementById('tabs-pills-bar');
+            const btns = pillsBar.querySelectorAll('button');
+            btns.forEach(btn => {
+                btn.className = "py-1.5 rounded-lg transition-all tm-sim-muted hover:opacity-85";
+                btn.style.backgroundColor = "transparent";
+            });
+
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            if (activeBtn) {
+                activeBtn.className = "py-1.5 rounded-lg transition-all shadow-sm tm-sim-text font-bold";
+                activeBtn.style.backgroundColor = "var(--tm-active-tab)";
+            }
+
+            triggerSandboxToast(`Switched view: ${tab.toUpperCase()}`, 'info');
+        }
+
+        // --- THEME ADAPTATION ---
+        function setSimTheme(themeName) {
+            currentSimTheme = themeName;
+            const root = document.getElementById('sim-body-root');
+            if (!root) return;
+
+            // Shift dynamic custom palette variables
+            root.className = "flex-1 flex flex-col overflow-hidden text-sm";
+            root.classList.add(`tm-theme-${themeName}`);
+            root.classList.add(`tm-sim-window`);
+
+            triggerSandboxToast(`Loaded ${themeName.toUpperCase()} color system`, 'success');
+        }
+
+        // --- WEEKLY TIMELINE STRIP GENERATOR ---
+        function renderTimelineStrip() {
+            const container = document.getElementById('sim-weekly-strip-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+            for (let i = 0; i < 7; i++) {
+                const dayNum = timelineBaseDate + i;
+                const weekdayLetter = weekdays[i];
+                const isSelected = (dayNum === activeSelectedDate);
+
+                // Check if this day has tasks registered
+                const hasTasksOnDay = simTasks.some(t => t.date === dayNum && t.month === 6 && t.year === 2026);
+
+                const itemBtn = document.createElement('button');
+                itemBtn.type = 'button';
+                itemBtn.onclick = () => selectTimelineDay(dayNum);
+
+                if (isSelected) {
+                    itemBtn.className = "p-1.5 rounded-lg text-white font-bold text-center block transition-all shadow-sm relative";
+                    itemBtn.style.backgroundColor = "var(--tm-accent)";
+                } else {
+                    itemBtn.className = "p-1.5 rounded-lg hover:bg-slate-500/10 text-center block transition-all tm-sim-text relative";
+                }
+
+                itemBtn.innerHTML = `
+                    <span class="block text-[9px] uppercase opacity-75">${weekdayLetter}</span>
+                    <span class="text-xs font-extrabold font-outfit block">${dayNum}</span>
+                    ${hasTasksOnDay && !isSelected ? '<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full" style="background-color: var(--tm-accent);"></span>' : ''}
+                `;
+                container.appendChild(itemBtn);
+            }
+
+            // Sync top header dates
+            document.getElementById('sim-month-header-label').textContent = `June 2026`;
+            updateCompletionCounts();
+        }
+
+        function selectTimelineDay(dayNum) {
+            activeSelectedDate = dayNum;
+            renderTimelineStrip();
+            renderSimAgenda();
+        }
+
+        function shiftTimeline(amount) {
+            timelineBaseDate += amount;
+            if (timelineBaseDate < 1) timelineBaseDate = 1;
+            if (timelineBaseDate > 24) timelineBaseDate = 24; // limit bounds for mock preview simplicity
+            
+            // Adjust selection as well
+            activeSelectedDate = timelineBaseDate;
+            renderTimelineStrip();
+            renderSimAgenda();
+            triggerSandboxToast(`Shifted schedule timeline`, 'info');
+        }
+
+        function resetTimelineToday() {
+            timelineBaseDate = 8;
+            activeSelectedDate = 8;
+            renderTimelineStrip();
+            renderSimAgenda();
+            triggerSandboxToast(`Reset to June 8, 2026 (Today)`, 'success');
+        }
+
+        // --- AGENDA MANAGEMENT ---
+        function renderSimAgenda() {
+            const dateLabel = document.getElementById('sim-cal-agenda-date');
+            const countLabel = document.getElementById('sim-cal-agenda-count');
+            const container = document.getElementById('sim-agenda-items-list');
+            if (!dateLabel || !countLabel || !container) return;
+
+            dateLabel.textContent = `June ${activeSelectedDate}, 2026`;
+            
+            const daysTasks = simTasks.filter(t => t.date === activeSelectedDate && t.month === 6 && t.year === 2026);
+            countLabel.textContent = `${daysTasks.length} task${daysTasks.length === 1 ? '' : 's'} active`;
+
+            container.innerHTML = '';
+
+            if (daysTasks.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 select-none">
+                        <!-- Screen-accurate list empty state layout -->
+                        <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background-color: var(--tm-tab-bg); color: var(--tm-accent)">
+                            <i class="ph ph-list-checks text-xl"></i>
+                        </div>
+                        <p class="text-xs font-semibold tm-sim-muted">No tasks for this date.</p>
+                    </div>`;
+                return;
+            }
+
+            daysTasks.forEach(task => {
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-lg border flex items-center justify-between gap-3 transition-all tm-sim-card ${task.completed ? 'opacity-65' : ''}`;
+                card.style.borderLeft = `3px solid ${task.priority === 'High' ? '#ef4444' : task.priority === 'Medium' ? '#f59e0b' : '#14b8a6'}`;
+
+                const completeIcon = task.completed ? 'ph-fill ph-check-circle text-emerald-500' : 'ph ph-circle tm-sim-muted';
+                const referenceLink = task.link ? `<a href="${task.link}" target="_blank" class="text-[9px] mt-1 hover:underline inline-flex items-center gap-0.5" style="color: var(--tm-accent)">🔗 URL Link</a>` : '';
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <button onclick="toggleTaskCompletion(${task.id})" class="text-base focus:outline-none shrink-0">
+                            <i class="${completeIcon}"></i>
+                        </button>
+                        <div class="overflow-hidden">
+                            <span class="block text-xs font-bold tm-sim-text ${task.completed ? 'line-through opacity-70' : ''}">${task.text}</span>
+                            ${referenceLink}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <span class="text-[8px] font-bold px-1.5 py-0.5 rounded uppercase ${task.priority === 'High' ? 'bg-red-400/20 text-red-500' : task.priority === 'Medium' ? 'bg-yellow-400/20 text-yellow-600' : 'bg-teal-400/20 text-teal-600'}">${task.priority}</span>
+                        <button onclick="deleteTask(${task.id})" class="text-slate-400 hover:text-red-500 text-sm">
+                            <i class="ph ph-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            updateCompletionCounts();
+        }
+
+        // --- CUMULATIVE ALL TASKS RENDERING ---
+        function renderSimTasks() {
+            const container = document.getElementById('sim-all-tasks-list');
+            if (!container) return;
+
+            let filtered = simTasks;
+            if (currentSimFilter === 'pending') filtered = simTasks.filter(t => !t.completed);
+            if (currentSimFilter === 'completed') filtered = simTasks.filter(t => t.completed);
+
+            document.getElementById('sim-total-count-lbl').textContent = filtered.length;
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-xs text-center py-6 tm-sim-muted">No entries registered under current scope.</p>`;
+                return;
+            }
+
+            filtered.forEach(task => {
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-lg border flex items-center justify-between gap-3 transition-all tm-sim-card ${task.completed ? 'opacity-65' : ''}`;
+                card.style.borderLeft = `3px solid ${task.priority === 'High' ? '#ef4444' : task.priority === 'Medium' ? '#f59e0b' : '#14b8a6'}`;
+
+                const completeIcon = task.completed ? 'ph-fill ph-check-circle text-emerald-500' : 'ph ph-circle tm-sim-muted';
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <button onclick="toggleTaskCompletion(${task.id})" class="text-base shrink-0">
+                            <i class="${completeIcon}"></i>
+                        </button>
+                        <div class="overflow-hidden">
+                            <span class="block text-xs font-bold tm-sim-text ${task.completed ? 'line-through opacity-70' : ''}">${task.text}</span>
+                            <span class="text-[9px] tm-sim-muted">Due: June ${task.date}, 2026</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="deleteTask(${task.id})" class="text-slate-400 hover:text-red-500 text-sm">
+                            <i class="ph ph-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleAddTaskForm() {
+            const form = document.getElementById('sim-inline-task-form');
+            form.classList.toggle('hidden');
+        }
+
+        function saveInlineTask() {
+            const textInput = document.getElementById('inline-task-text');
+            const priorityInput = document.getElementById('inline-task-priority');
+            const linkInput = document.getElementById('inline-task-link');
+
+            if (!textInput.value.trim()) {
+                triggerSandboxToast('Please describe the task objective!', 'warning');
+                return;
+            }
+
+            const newTask = {
+                id: Date.now(),
+                text: textInput.value,
+                priority: priorityInput.value,
+                date: activeSelectedDate,
+                month: 6,
+                year: 2026,
+                completed: false,
+                link: linkInput.value.trim()
+            };
+
+            simTasks.unshift(newTask);
+            
+            // clear inputs
+            textInput.value = '';
+            linkInput.value = '';
+            toggleAddTaskForm();
+
+            renderTimelineStrip();
+            renderSimAgenda();
+            renderSimTasks();
+            triggerSandboxToast('Saved task to agenda collection!', 'success');
+        }
+
+        function toggleTaskCompletion(id) {
+            const task = simTasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                renderTimelineStrip();
+                renderSimAgenda();
+                renderSimTasks();
+                triggerSandboxToast(`Item marked as ${task.completed ? 'Finished' : 'Pending'}`, 'success');
+            }
+        }
+
+        function deleteTask(id) {
+            simTasks = simTasks.filter(t => t.id !== id);
+            renderTimelineStrip();
+            renderSimAgenda();
+            renderSimTasks();
+            triggerSandboxToast('Item deleted successfully', 'warning');
+        }
+
+        function filterSimTasks(scope) {
+            currentSimFilter = scope;
+            
+            document.getElementById('filter-btn-all').className = "tm-sim-muted hover:text-white";
+            document.getElementById('filter-btn-pending').className = "tm-sim-muted hover:text-white";
+            document.getElementById('filter-btn-completed').className = "tm-sim-muted hover:text-white";
+
+            document.getElementById(`filter-btn-${scope}`).className = "font-bold tm-sim-accent";
+            renderSimTasks();
+        }
+
+        function updateCompletionCounts() {
+            const completionBadge = document.getElementById('sim-completion-badge');
+            if (!completionBadge) return;
+
+            const totalCount = simTasks.length;
+            const completedCount = simTasks.filter(t => t.completed).length;
+            completionBadge.textContent = `Done: ${completedCount}/${totalCount}`;
+        }
+
+        // --- STICKY NOTES ACTIONS ---
+        function renderSimNotes() {
+            const grid = document.getElementById('sim-notes-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            simNotes.forEach(note => {
+                const card = document.createElement('div');
+                card.className = `${note.bg} p-3 rounded-xl text-slate-900 shadow border border-black/5 flex flex-col justify-between h-28 transform rotate-1 hover:rotate-0 transition-all ${note.font}`;
+                card.style.backgroundColor = note.bg;
+
+                card.innerHTML = `
+                    <p class="text-xs font-semibold whitespace-pre-wrap overflow-y-auto leading-relaxed max-h-[80px]">${note.text}</p>
+                    <div class="flex items-center justify-between border-t border-black/5 pt-1.5 mt-1">
+                        <span class="text-[8px] tracking-widest font-bold font-sans uppercase text-slate-500">TaskMaster Scratchpad</span>
+                        <button onclick="deleteSimNote(${note.id})" class="text-slate-500 hover:text-red-600">
+                            <i class="ph ph-trash text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setSimNoteColor(hex) {
+            activeNoteColor = hex;
+            triggerSandboxToast('Background swatch updated', 'info');
+        }
+
+        function setSimNoteFont(fontClass) {
+            activeNoteFont = fontClass;
+            triggerSandboxToast(`Font selection: ${fontClass.replace('font-', '').toUpperCase()}`, 'info');
+        }
+
+        function addSimNote() {
+            const textarea = document.getElementById('sim-note-textarea');
+            if (!textarea.value.trim()) {
+                triggerSandboxToast('Please write content inside your scratch note!', 'warning');
+                return;
+            }
+
+            const newNote = {
+                id: Date.now(),
+                text: textarea.value,
+                bg: activeNoteColor,
+                font: activeNoteFont
+            };
+
+            simNotes.unshift(newNote);
+            textarea.value = '';
+            renderSimNotes();
+            triggerSandboxToast('Note posted to theme board!', 'success');
+        }
+
+        function deleteSimNote(id) {
+            simNotes = simNotes.filter(n => n.id !== id);
+            renderSimNotes();
+            triggerSandboxToast('Sticky note discarded', 'warning');
+        }
+
+        function toggleSimSplitPanel() {
+            splitPanelActive = !splitPanelActive;
+            triggerSandboxToast(splitPanelActive ? 'Sidebar split view enabled' : 'Focused layout enabled', 'info');
+        }
+
+        function simBackupSimulation() {
+            triggerSandboxToast('Connecting local secure folder path...', 'info');
+            setTimeout(() => {
+                triggerSandboxToast('Automated backup processed successfully! Generated: "taskmaster_backup.json"', 'success');
+            }, 800);
+        }
+
+        function simExportJSON() {
+            const dataStr = JSON.stringify({ app: "TaskMaster 2.0", tasks: simTasks, notes: simNotes }, null, 2);
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = dataStr;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextarea);
+
+            triggerSandboxToast('JSON data exported & copied to clipboard!', 'success');
+        }
+
+        function simImportPrompt() {
+            triggerSandboxToast('Simulation: Select backup file prompt triggered successfully', 'info');
+        }
+
+        function simAddPresetTask() {
+            simTasks = [
+                { id: 101, text: "Finish final figma design systems updates", priority: "High", date: 8, month: 6, year: 2026, completed: false, link: "https://figma.com" },
+                { id: 102, text: "Double-check Dracula palette colors in chrome manifest", priority: "Medium", date: 8, month: 6, year: 2026, completed: false, link: "" },
+                { id: 103, text: "Organize launch criterion benchmarks", priority: "High", date: 9, month: 6, year: 2026, completed: false, link: "" },
+                { id: 104, text: "Draft comprehensive user manual guides", priority: "Low", date: 11, month: 6, year: 2026, completed: true, link: "" }
+            ];
+            renderTimelineStrip();
+            renderSimAgenda();
+            renderSimTasks();
+            triggerSandboxToast('Imported mock presets to timeline database!', 'success');
+        }
+
+        // --- LANDING PAGE CUSTOM FAQ ACCORDIONS ---
+        function toggleFaq(id) {
+            const answer = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            
+            if (answer.classList.contains('open')) {
+                answer.classList.remove('open');
+                icon.className = "ph ph-plus text-zinc-400 text-base transition-transform duration-300";
+            } else {
+                for (let i = 1; i <= 3; i++) {
+                    const ans = document.getElementById(`faq-ans-${i}`);
+                    const ic = document.getElementById(`faq-icon-${i}`);
+                    if (ans && ic) {
+                        ans.classList.remove('open');
+                        ic.className = "ph ph-plus text-zinc-400 text-base transition-transform duration-300";
+                    }
+                }
+                
+                answer.classList.add('open');
+                icon.className = "ph ph-minus text-white text-base transition-transform duration-300";
+            }
+        }
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            triggerSandboxToast('Message submitted securely to BrahmaVivek Labs!', 'success');
+            form.reset();
+        }
+    </script>
+</body>
+</html>
